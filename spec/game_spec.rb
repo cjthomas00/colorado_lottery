@@ -22,4 +22,14 @@ RSpec.describe Game do
       expect(mega_millions.cost).to eq(5)
     end
   end
+
+  describe '#national_drawing?' do 
+    it 'returns false when not given' do 
+      expect(pick_4.national_drawing?).to eq(false)
+    end
+
+    it 'returns true when given' do
+      expect(mega_millions.national_drawing?).to eq(true)
+    end
+  end
 end
