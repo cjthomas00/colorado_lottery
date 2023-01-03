@@ -28,4 +28,8 @@ class ColoradoLottery
         @registered_contestants[game.name] << contestant
     end 
   end
+
+  def eligible_contestants(game)
+    if @registered_contestants
+  end
 end

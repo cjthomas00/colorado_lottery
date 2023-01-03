@@ -121,12 +121,29 @@ RSpec.describe ColoradoLottery do
         'Pick 4' => [alexander, grace],
         'Mega Millions' => [alexander, frederick, winston, grace],
         'Cash 5' => [winston, grace]
-      }
+        }
 
-      expect(lottery.registered_contestants).to eq(expected_hash)
+        expect(lottery.registered_contestants).to eq(expected_hash)
       end
     end
   end
 
+  describe '#eligible_contestants' do
+      before do 
+        lottery.register_contestant(alexander, pick_4)
+        lottery.register_contestant(alexander, mega_millions)
+        lottery.register_contestant(frederick, mega_millions)
+        lottery.register_contestant(winston, cash_5)
+        lottery.register_contestant(winston, mega_millions)
+        lottery.register_contestant(grace, mega_millions)
+        lottery.register_contestant(grace, cash_5)
+        lottery.register_contestant(grace, pick_4)
+      end
 
+      it 'returns array of eligible contestants who have been registered and can pay for their tickets.' do 
+        expect(lottery.eligible_contestants(pick_4)).to eq([alexander, grace])
+        expect(lottery.eligible_contestants(cash_5)).to eq([winston, grace])
+        expect(lottery.eligible_contestants(mega_millions)).to eq([alexander, frederick, winston, grace])
+      end
+    end
 end
