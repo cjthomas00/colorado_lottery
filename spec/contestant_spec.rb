@@ -24,8 +24,17 @@ RSpec.describe Contestant do
   end
 
   describe '#out_of_state?' do
-    it 'should return true when not in CO' do
+    it 'should return false when not resident in CO' do
       expect(alexander.out_of_state?).to eq(false)
+    end
+  end
+
+  describe '#add_game_interest' do 
+    it 'add to game_interest array' do
+      alexander.add_game_interest('Mega Millions')
+      alexander.add_game_interest('Pick 4')
+
+      expect(alexander.game_interest).to eq(['Mega Millions', 'Pick 4'])
     end
   end
 end
