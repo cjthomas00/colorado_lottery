@@ -13,5 +13,19 @@ RSpec.describe Contestant do
     it "exists" do 
       expect(alexander).to be_instance_of(Contestant)
     end
+
+    it "has attributes" do 
+      expect(alexander.full_name).to eq("Alexander Aigiades")
+      expect(alexander.age).to eq(28)
+      expect(alexander.state_of_residence).to eq("CO")
+      expect(alexander.spending_money).to eq(10)
+      expect(alexander.game_interests).to eq([])
+    end
+  end
+
+  describe '#out_of_state?' do
+    it 'should return true when not in CO' do
+      expect(alexander.out_of_state?).to eq(false)
+    end
   end
 end
