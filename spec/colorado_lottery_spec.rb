@@ -7,6 +7,14 @@ RSpec.describe ColoradoLottery do
   let(:pick_4) { Game.new('Pick 4', 2) }
   let(:cash_5) { Game.new('Cash 5', 1) }
   let(:mega_millions) { Game.new('Mega Millions', 5, true) }
+  let(:grace) do
+    Contestant.new({
+                     first_name: 'Grace',
+                     last_name: 'Hopper',
+                     age: 20,
+                     state_of_residence: 'CO',
+                     spending_money: 20})
+  end
   let(:alexander) do 
     Contestant.new({
                        first_name: 'Alexander',
@@ -51,6 +59,9 @@ RSpec.describe ColoradoLottery do
     winston.add_game_interest('Cash 5')
     winston.add_game_interest('Mega Millions')
     benjamin.add_game_interest('Mega Millions')
+    grace.add_game_interest('Mega Millions')
+    grace.add_game_interest('Cash 5')
+    grace.add_game_interest('Pick 4')
   end
   describe '#initialize' do
     it 'exists' do
@@ -79,6 +90,41 @@ RSpec.describe ColoradoLottery do
       expect(lottery.can_register?(frederick, mega_millions)).to eq(true)
       expect(lottery.can_register?(benjamin, mega_millions)).to eq(false)
       expect(lottery.can_register?(frederick, cash_5)).to eq(false)
+    end
+
+    describe '#register_contestant' do
+      it 'can register a contestant' do
+        lottery.register_contestant(alexander, pick_4)
+
+        expect(lottery.registered_contestants).to eq({ 'Pick 4' => [alexander] })
+
+        lottery.register_contestant(alexander, mega_millions)
+
+        expect(lottery.registered_contestants).to eq({ 'Pick 4' => [alexander], 'Mega Millions' => [alexander] })
+        lottery.register_contestant(frederick, mega_millions)
+        lottery.register_contestant(winston, cash_5)
+        lottery.register_contestant(winston, mega_millions)
+
+        expected_hash = {
+          'Pick 4' => [alexander],
+          'Mega Millions' => [alexander, frederick, winston],
+          'Cash 5' => [winston]
+        }
+
+        expect(lottery.registered_contestants).to eq(expected_hash)
+
+        lottery.register_contestant(grace, mega_millions)
+        lottery.register_contestant(grace, cash_5)
+        lottery.register_contestant(grace, pick_4)
+
+        expected_hash = {
+        'Pick 4' => [alexander, grace],
+        'Mega Millions' => [alexander, frederick, winston, grace],
+        'Cash 5' => [winston, grace]
+      }
+
+      expect(lottery.registered_contestants).to eq(expected_hash)
+      end
     end
   end
 
