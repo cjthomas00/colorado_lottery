@@ -56,5 +56,31 @@ RSpec.describe ColoradoLottery do
     it 'exists' do
     expect(lottery).to be_instance_of(ColoradoLottery)
     end
-  end 
+
+    it 'has attributes' do
+      expect(lottery.registered_contestants).to eq({})
+      expect(lottery.winners).to eq([])
+      expect(lottery.current_contestants).to eq({})
+    end
+  end
+
+  describe '#interested_and_18?' do
+    it 'returns true' do
+      expect(lottery.interested_and_18?(alexander, pick_4)).to eq(true)
+      expect(lottery.interested_and_18?(benjamin, mega_millions)).to eq(false)
+      expect(lottery.interested_and_18?(alexander, cash_5)).to eq(false)
+    end
+  end
+
+  describe '#can_register?' do
+    it 'returns true when interested_and_18, colorado resident or game is national' do 
+      expect(lottery.can_register?(alexander, pick_4)).to eq(true)
+      expect(lottery.can_register?(alexander, cash_5)).to eq(false)
+      expect(lottery.can_register?(frederick, mega_millions)).to eq(true)
+      expect(lottery.can_register?(benjamin, mega_millions)).to eq(false)
+      expect(lottery.can_register?(frederick, cash_5)).to eq(false)
+    end
+  end
+
+
 end
